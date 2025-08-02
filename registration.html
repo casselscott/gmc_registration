@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Great Minds Code - Student Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            width: 100px;
+            height: 100px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            width: 80px;
+            height: 80px;
+            background: #4ecdc4;
+            transform: rotate(45deg);
+            animation-delay: -2s;
+        }
+
+        .shape:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            width: 60px;
+            height: 60px;
+            background: #45b7d1;
+            border-radius: 50%;
+            animation-delay: -4s;
+        }
+
+        .shape:nth-child(4) {
+            top: 30%;
+            left: 70%;
+            width: 40px;
+            height: 40px;
+            background: #f39c12;
+            border-radius: 50%;
+            animation-delay: -1s;
+        }
+
+        .shape:nth-child(5) {
+            bottom: 40%;
+            right: 30%;
+            width: 70px;
+            height: 70px;
+            background: #9b59b6;
+            transform: rotate(30deg);
+            animation-delay: -3s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            transform: perspective(1000px) rotateX(15deg) rotateY(-15deg);
+            box-shadow: 0 20px 40px rgba(255,107,107,0.3), 0 0 50px rgba(78,205,196,0.2);
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: perspective(1000px) rotateX(15deg) rotateY(-15deg) translateY(0px); }
+            50% { transform: perspective(1000px) rotateX(15deg) rotateY(-15deg) translateY(-10px); }
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 40px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 100px rgba(255,107,107,0.1);
+            animation: fadeInUp 1s ease-out 0.3s backwards;
+            transform-style: preserve-3d;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,250,252,0.9));
+            border-radius: 16px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            transform: perspective(1000px) rotateX(2deg);
+            transition: all 0.3s ease;
+            animation: slideInRight 0.8s ease-out backwards;
+        }
+
+        .section:nth-child(even) {
+            animation: slideInLeft 0.8s ease-out backwards;
+        }
+
+        .section:hover {
+            transform: perspective(1000px) rotateX(0deg) translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .section-title {
+            color: #2d3748;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            color: #4a5568;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .required::after {
+            content: " *";
+            color: #e53e3e;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .checkbox-item:hover {
+            background-color: rgba(102, 126, 234, 0.05);
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin: 0;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .payment-info {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 16px;
+            margin-top: 30px;
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.3);
+            transform: perspective(1000px) rotateX(-2deg);
+        }
+
+        .payment-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .payment-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .payment-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .payment-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .payment-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 16px 48px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            margin: 40px auto 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+            transform: perspective(1000px) rotateX(-5deg);
+        }
+
+        .submit-btn:hover {
+            transform: perspective(1000px) rotateX(0deg) translateY(-3px);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: perspective(1000px) rotateX(2deg) translateY(1px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: perspective(1000px) rotateX(2deg) translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: perspective(1000px) rotateX(2deg) translateX(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: perspective(1000px) rotateX(2deg) translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: perspective(1000px) rotateX(2deg) translateX(0);
+            }
+        }
+
+        /* Thank You Popup Styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .popup-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .popup-overlay.active .popup-content {
+            transform: scale(1);
+        }
+        
+        .popup-icon {
+            font-size: 60px;
+            color: #4ecdc4;
+            margin-bottom: 20px;
+            animation: bounce 1s;
+        }
+        
+        .popup-title {
+            font-size: 28px;
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .popup-message {
+            font-size: 18px;
+            color: #4a5568;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        .popup-close {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .popup-close:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .form-container {
+                padding: 25px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .popup-content {
+                padding: 30px 20px;
+                margin: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">GMC</div>
+            <h1>Great Minds Code</h1>
+            <p>Join the Future of Learning - Registration Form</p>
+        </div>
+
+        <div class="form-container">
+            <form id="registrationForm" action="https://formspree.io/f/mrblagkv" method="POST">
+                <!-- Formspree Configuration -->
+                <input type="hidden" name="_subject" value="New Student Registration - Great Minds Code">
+                <input type="hidden" name="_replyto" value="hello@greatmindscode.com">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="selectedInterests" id="selectedInterests">
+                
+                <!-- Personal Information -->
+                <div class="section" style="animation-delay: 0.1s">
+                    <h2 class="section-title">
+                        <div class="section-icon">👤</div>
+                        Personal Information
+                    </h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="fullName" class="required">Full Name</label>
+                            <input type="text" id="fullName" name="fullName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender" name="gender">
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="prefer-not-to-say">Prefer not to say</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="required">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="required">Phone Number / WhatsApp</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="country" class="required">Country</label>
+                            <input type="text" id="country" name="country" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="city" class="required">State/City</label>
+                            <input type="text" id="city" name="city" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Program Category -->
+                <div class="section" style="animation-delay: 0.2s">
+                    <h2 class="section-title">
+                        <div class="section-icon">🎯</div>
+                        Program Category
+                    </h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="category" class="required">Select Category</label>
+                            <select id="category" name="category" required>
+                                <option value="">Choose your category</option>
+                                <option value="kids">Kids (Ages 7–12)</option>
+                                <option value="teens">Teens (Ages 13–17)</option>
+                                <option value="young-adults">Young Adults (Ages 18–24)</option>
+                                <option value="adults">Adults (25+)</option>
+                                <option value="professionals">Professionals (Upskilling / Career Switch)</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="required">Area of Interest (Select all that apply)</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="coding" name="interests" value="coding">
+                                    <label for="coding">Coding & Programming</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="ai" name="interests" value="ai">
+                                    <label for="ai">Artificial Intelligence & Machine Learning</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="data-science" name="interests" value="data-science">
+                                    <label for="data-science">Data Science</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="frontend-dev" name="interests" value="frontend-dev">
+                                    <label for="frontend-dev">Frontend Development</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="backend-dev" name="interests" value="backend-dev">
+                                    <label for="backend-dev">Backend Development</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="web-dev" name="interests" value="web-dev">
+                                    <label for="web-dev">Web Development</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="mobile-dev" name="interests" value="mobile-dev">
+                                    <label for="mobile-dev">Mobile App Development</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="ux-ui-design" name="interests" value="ux-ui-design">
+                                    <label for="ux-ui-design">UX/UI Design</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="product-management" name="interests" value="product-management">
+                                    <label for="product-management">Software Product Management</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="data-analyst" name="interests" value="data-analyst">
+                                    <label for="data-analyst">Data Analyst</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="business-analyst" name="interests" value="business-analyst">
+                                    <label for="business-analyst">Business Analyst</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="other-interest" name="interests" value="other">
+                                    <label for="other-interest">Other</label>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-top: 15px;">
+                                <input type="text" id="other-specify" name="otherSpecify" placeholder="Please specify if 'Other' selected" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skill Level -->
+                <div class="section" style="animation-delay: 0.3s">
+                    <h2 class="section-title">
+                        <div class="section-icon">📊</div>
+                        Skill Level
+                    </h2>
+                    <div class="form-group">
+                        <label for="skillLevel" class="required">Current Skill Level</label>
+                        <select id="skillLevel" name="skill_level" required>
+                            <option value="">Select your skill level</option>
+                            <option value="Beginner – No experience">Beginner – No experience</option>
+                            <option value="Intermediate – Some experience">Intermediate – Some experience</option>
+                            <option value="Advanced – Professional experience">Advanced – Professional experience</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Session Availability -->
+                <div class="section" style="animation-delay: 0.35s">
+                    <h2 class="section-title">
+                        <div class="section-icon">🕐</div>
+                        Session Availability
+                    </h2>
+                    <div class="form-group">
+                        <label for="sessionTime" class="required">Preferred Session Time</label>
+                        <select id="sessionTime" name="preferred_session" required>
+                            <option value="">Select your preferred session</option>
+                            <option value="Morning Session (10:00 AM - 12:00 PM)">Morning Session (10:00 AM - 12:00 PM)</option>
+                            <option value="Evening Session (4:00 PM - 6:00 PM)">Evening Session (4:00 PM - 6:00 PM)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Parent/Guardian Information -->
+                <div class="section" id="guardianSection" style="animation-delay: 0.45s; display: none;">
+                    <h2 class="section-title">
+                        <div class="section-icon">👨‍👩‍👧‍👦</div>
+                        Parent/Guardian Information
+                    </h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="guardianName" class="required">Parent/Guardian Full Name</label>
+                            <input type="text" id="guardianName" name="guardian_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="guardianPhone" class="required">Parent/Guardian Phone</label>
+                            <input type="tel" id="guardianPhone" name="guardian_phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="guardianEmail" class="required">Parent/Guardian Email</label>
+                            <input type="email" id="guardianEmail" name="guardian_email">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Referral & Agreement -->
+                <div class="section" style="animation-delay: 0.55s">
+                    <h2 class="section-title">
+                        <div class="section-icon">🤝</div>
+                        Referral & Agreement
+                    </h2>
+                    <div class="form-group">
+                        <label for="referral">How did you hear about Great Minds Code?</label>
+                        <select id="referral" name="referral_source">
+                            <option value="">Select option</option>
+                            <option value="Social Media">Social Media</option>
+                            <option value="Friend/Family">Friend/Family</option>
+                            <option value="Event">Event</option>
+                            <option value="Website">Website</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="checkbox-group" style="margin-top: 20px;">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="terms" name="agrees_to_terms" value="Yes" required>
+                            <label for="terms" class="required">I agree to the terms and conditions</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="updates" name="wants_updates" value="Yes">
+                            <label for="updates">I agree to receive updates via email/WhatsApp</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Details -->
+                <div class="payment-info">
+                    <div class="payment-title">💳 Payment Details</div>
+                    <div class="payment-details">
+                        <div class="payment-item">
+                            <div class="payment-label">Account Name</div>
+                            <div class="payment-value">Great Minds Code Learning</div>
+                        </div>
+                        <div class="payment-item">
+                            <div class="payment-label">Bank Name</div>
+                            <div class="payment-value">Guaranty Trust Bank (GTBank)</div>
+                        </div>
+                        <div class="payment-item">
+                            <div class="payment-label">Account Number</div>
+                            <div class="payment-value">3001579817</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">🚀 Submit Registration</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Thank You Popup -->
+    <div class="popup-overlay" id="thankYouPopup">
+        <div class="popup-content">
+            <div class="popup-icon">🎉</div>
+            <h2 class="popup-title">Thank You!</h2>
+            <p class="popup-message">Your registration was successful. A team member will get in touch with you shortly.</p>
+            <button class="popup-close" onclick="closePopup()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registrationForm');
+            const categorySelect = document.getElementById('category');
+            const guardianSection = document.getElementById('guardianSection');
+            const otherInterestCheck = document.getElementById('other-interest');
+            const otherSpecify = document.getElementById('other-specify');
+            const interestCheckboxes = document.querySelectorAll('input[name="interests"]');
+            const selectedInterestsField = document.getElementById('selectedInterests');
+
+            // Show/hide guardian section based on age category
+            categorySelect.addEventListener('change', function() {
+                const selectedValue = this.value;
+                
+                if (selectedValue === 'kids' || selectedValue === 'teens') {
+                    guardianSection.style.display = 'block';
+                    guardianSection.style.animation = 'fadeInUp 0.5s ease-out';
+                    
+                    // Make guardian fields required
+                    document.getElementById('guardianName').required = true;
+                    document.getElementById('guardianPhone').required = true;
+                    document.getElementById('guardianEmail').required = true;
+                } else {
+                    guardianSection.style.display = 'none';
+                    
+                    // Remove required attribute
+                    document.getElementById('guardianName').required = false;
+                    document.getElementById('guardianPhone').required = false;
+                    document.getElementById('guardianEmail').required = false;
+                }
+            });
+
+            // Show/hide other specify field
+            otherInterestCheck.addEventListener('change', function() {
+                if (this.checked) {
+                    otherSpecify.style.display = 'block';
+                    otherSpecify.required = true;
+                } else {
+                    otherSpecify.style.display = 'none';
+                    otherSpecify.required = false;
+                    otherSpecify.value = '';
+                }
+            });
+
+            // Update selected interests for Formspree
+            function updateSelectedInterests() {
+                const selectedInterests = Array.from(interestCheckboxes)
+                    .filter(cb => cb.checked)
+                    .map(cb => {
+                        if (cb.value === 'other' && otherSpecify.value) {
+                            return `Other: ${otherSpecify.value}`;
+                        }
+                        return cb.parentElement.querySelector('label').textContent;
+                    });
+                selectedInterestsField.value = selectedInterests.join(', ');
+            }
+
+            interestCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateSelectedInterests);
+            });
+
+            otherSpecify.addEventListener('input', updateSelectedInterests);
+
+            // Form submission handling
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Basic validation
+                const requiredFields = this.querySelectorAll('[required]');
+                let isValid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value.trim() && field.type !== 'checkbox') {
+                        field.style.borderColor = '#e53e3e';
+                        isValid = false;
+                    } else if (field.type === 'checkbox' && !field.checked) {
+                        field.parentElement.style.backgroundColor = 'rgba(229, 62, 62, 0.1)';
+                        isValid = false;
+                    } else {
+                        field.style.borderColor = '#e2e8f0';
+                        if (field.type === 'checkbox') {
+                            field.parentElement.style.backgroundColor = '';
+                        }
+                    }
+                });
+
+                // Check if at least one interest is selected
+                const checkedInterests = Array.from(interestCheckboxes).filter(cb => cb.checked);
+                if (checkedInterests.length === 0) {
+                    alert('Please select at least one area of interest.');
+                    isValid = false;
+                    return;
+                }
+
+                if (!isValid) {
+                    alert('Please fill in all required fields.');
+                    return;
+                }
+
+                // Update selected interests one more time before submission
+                updateSelectedInterests();
+                
+                // Show loading state
+                const submitBtn = this.querySelector('.submit-btn');
+                const originalText = submitBtn.textContent;
+                
+                submitBtn.textContent = '📧 Sending Registration...';
+                submitBtn.disabled = true;
+                
+                // Submit to Formspree
+                fetch(this.action, {
+                    method: 'POST',
+                    body: new FormData(this),
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Show popup instead of redirecting
+                        showPopup();
+                        // Reset the form
+                        form.reset();
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                })
+                .catch(error => {
+                    alert('There was a problem submitting your form. Please try again later.');
+                    console.error('Error:', error);
+                })
+                .finally(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                });
+            });
+            
+            // Popup functions
+            function showPopup() {
+                const popup = document.getElementById('thankYouPopup');
+                popup.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            }
+            
+            window.closePopup = function() {
+                const popup = document.getElementById('thankYouPopup');
+                popup.classList.remove('active');
+                document.body.style.overflow = ''; // Re-enable scrolling
+            }
+            
+            // Close popup when clicking outside content
+            document.getElementById('thankYouPopup').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closePopup();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
